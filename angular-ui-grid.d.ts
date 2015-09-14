@@ -129,7 +129,7 @@ declare module angular.uiGrid {
         infiniteScrollUp: boolean;
         maxVisibleColumnCount: number;
         minRowsToShow: number;
-        minimumColumnSize: number
+        minimumColumnSize: number;
         onRegisterApi: (gridApi: IGridApi) => void;
         rowHeight: number;
         rowTemplate: string;
