@@ -98,29 +98,50 @@ declare module angular.uiGrid {
         SaveState.IGridOptions,
         Selection.IGridOptions,
         TreeBase.IGridOptions,
-        TreeView.IGridOptions{
-        onRegisterApi: (gridApi) => void;
-        data: any[];
+        TreeView.IGridOptions {
+        aggregationCalcThrottle: number;
+        appScopeProvider: any;
         columnDefs: IColumnDef[];
-        totalItems: number;
-
-        useExternalPagination: boolean;
-        useExternalSorting: boolean;
-        paginationPageSizes: number[];
-        paginationPageSize: number;
-
+        columnFooterHeight: number;
+        columnVirtualizationThreshold: number;
+        data: any[];
+        enableColumnMenus: boolean;
+        enableFiltering: boolean;
         enableGridMenu: boolean;
-        exporterMenuAllData: boolean;
-        exporterMenuPdf: boolean;
-        exporterSuppressColumns: string[];
-
-        multiSelect: boolean;
-        modifierKeysToMultiSelect: boolean;
-        noUnselect: boolean;
-        enableRowHeaderSelection: boolean;
-        enableRowSelection: boolean;
-
+        enableHorizontalScrollbar: any;
+        enableMinHeightCheck: boolean;
+        enableRowHashing: boolean;
+        enableSorting: boolean;
+        enableVerticalScrollbar: any;
+        excessColumns: number;
+        excessRows: number;
+        excludeProperties: string[];
+        flatEntityAccess: boolean;
+        footerTemplate: string;
+        gridFooterTemplate: string;
         gridMenuCustomItems: IMenuCustomItem[];
+        gridMenuShowHideColumns: boolean;
+        gridMenuTitleFilter: (dislpayName) => string | IPromise<any>;
+        headerTemplate: string;
+        horizontalScrollThreshold: number;
+        infiniteScrollDown: boolean;
+        infiniteScrollRowsFromEnd: number;
+        infiniteScrollUp: boolean;
+        maxVisibleColumnCount: number;
+        minRowsToShow: number;
+        minimumColumnSize: number
+        onRegisterApi: (gridApi: IGridApi) => void;
+        rowHeight: number;
+        rowTemplate: string;
+        scrollDebounce: number;
+        scrollThreshold: number;
+        showColumnFooter: boolean;
+        showGridFooter: boolean;
+        showHeader: boolean;
+        useExternalFiltering: boolean;
+        useExternalSorting: boolean;
+        virtualizationThreshold: number;
+        wheelScrollThrottle: number;
     }
 
     interface IColumnDef extends
@@ -355,6 +376,7 @@ declare module angular.uiGrid {
             exporterHeaderFilter: (displayName: string) => string;
             exporterHeaderFilterUseName: boolean;
             exporterMenuCsv: boolean;
+            exporterMenuAllData: boolean;
             exporterMenuLabel: string;
             exporterMenuPdf: boolean;
             exporterOlderExcelCompatibility: boolean;
