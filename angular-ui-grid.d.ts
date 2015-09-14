@@ -366,11 +366,6 @@ declare module angular.uiGrid {
         interface IGridOptions {
             exporterAllDataFn: () => IPromise<any>;
             exporterCsvColumnSeparator: string;
-        }
-
-        interface IColumnDef {
-            exporterPdfAlign: string;
-            exporterSuppressExport: boolean;
             exporterCsvFilename: string;
             exporterFieldCallback: (grid: IGrid, row: IGridRow, col: IGridColumn, value: any) => any;
             exporterHeaderFilter: (displayName: string) => string;
@@ -393,6 +388,11 @@ declare module angular.uiGrid {
             exporterPdfTableStyle: any;
             exporterSuppressColumns: string[];
             exporterSuppressMenu: boolean;
+        }
+
+        interface IColumnDef {
+            exporterPdfAlign: string;
+            exporterSuppressExport: boolean;
         }
 
         interface IGridRow {
