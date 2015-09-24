@@ -68,6 +68,7 @@ declare module angular.uiGrid {
         edit: Edit.IGridApi;
         expandable: Expandable.IGridApi;
         exporter: Exporter.IGridApi;
+        grid: IGrid;
         grouping: Grouping.IGridApi;
         importer: Importer.IGridApi;
         infiniteScroll: InfiniteScroll.IGridApi;
@@ -84,6 +85,7 @@ declare module angular.uiGrid {
 
     interface IGridOptions extends
         CellNav.IGridOptions,
+        Core.IGridOptions,
         Edit.IGridOptions,
         Expandable.IGridOptions,
         Exporter.IGridOptions,
@@ -99,49 +101,6 @@ declare module angular.uiGrid {
         Selection.IGridOptions,
         TreeBase.IGridOptions,
         TreeView.IGridOptions {
-        aggregationCalcThrottle: number;
-        appScopeProvider: any;
-        columnDefs: IColumnDef[];
-        columnFooterHeight: number;
-        columnVirtualizationThreshold: number;
-        data: any[];
-        enableColumnMenus: boolean;
-        enableFiltering: boolean;
-        enableGridMenu: boolean;
-        enableHorizontalScrollbar: any;
-        enableMinHeightCheck: boolean;
-        enableRowHashing: boolean;
-        enableSorting: boolean;
-        enableVerticalScrollbar: any;
-        excessColumns: number;
-        excessRows: number;
-        excludeProperties: string[];
-        flatEntityAccess: boolean;
-        footerTemplate: string;
-        gridFooterTemplate: string;
-        gridMenuCustomItems: IMenuCustomItem[];
-        gridMenuShowHideColumns: boolean;
-        gridMenuTitleFilter: (dislpayName) => string | IPromise<any>;
-        headerTemplate: string;
-        horizontalScrollThreshold: number;
-        infiniteScrollDown: boolean;
-        infiniteScrollRowsFromEnd: number;
-        infiniteScrollUp: boolean;
-        maxVisibleColumnCount: number;
-        minRowsToShow: number;
-        minimumColumnSize: number;
-        onRegisterApi: (gridApi: IGridApi) => void;
-        rowHeight: number;
-        rowTemplate: string;
-        scrollDebounce: number;
-        scrollThreshold: number;
-        showColumnFooter: boolean;
-        showGridFooter: boolean;
-        showHeader: boolean;
-        useExternalFiltering: boolean;
-        useExternalSorting: boolean;
-        virtualizationThreshold: number;
-        wheelScrollThrottle: number;
     }
 
     interface IColumnDef extends
@@ -152,7 +111,7 @@ declare module angular.uiGrid {
         MoveColumns.IColumnDef,
         Pinning.IColumnDef,
         ResizeColumns.IColumnDef,
-        TreeBase.IColumnDef{
+        TreeBase.IColumnDef {
         aggregationHideLabel: boolean;
         aggregationType: any;
         cellClass: string;
@@ -243,17 +202,21 @@ declare module angular.uiGrid {
     }
 
     module CellNav {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             getCurrentSelection(): any[];
             getFocusedCell(): any;
             rowColSelectIndex(rowCol: any): number;
             scrollToFocus(rowEntity: any, colDef: IColumnDef): IPromise<any>;
+        }
 
-            on: {
-                navigate(scope, callBack: (newRowcol, oldRowCol) => void): void;
-                viewPortKeyDown(callBack: (event, rowCol) => void): void;
-                viewPortKeyPress(callBack: (event, rowCol) => void): void;
-            }
+        interface IGridApiEvents {
+            navigate(scope, callBack: (newRowcol, oldRowCol) => void): void;
+            viewPortKeyDown(callBack: (event, rowCol) => void): void;
+            viewPortKeyPress(callBack: (event, rowCol) => void): void;
         }
 
         interface IGridOptions {
@@ -270,7 +233,11 @@ declare module angular.uiGrid {
     }
 
     module Core {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             addRowHeaderColumn(column: IColumnDef): void;
             addToGridMenu(grid: IGrid, items: IMenuCustomItem[]): void;
             clearAllFilters(refreshRows: boolean, clearConditions: boolean, clearFlags: boolean): IPromise<any>;
@@ -288,23 +255,73 @@ declare module angular.uiGrid {
             scrollToIfNecessary(gridRow: IGridRow, gridCol: IColumnDef): IPromise<any>;
             setRowInvisible(rowEntity: any): void;
             sortHandleNulls(a: any, b: any): any;
+        }
 
-            on: {
-                canvasHeightChanged(oldHeight: number, newHeight: number): void
-                columnVisibilityChanged(scope: any, callBack: (column: IColumnDef) => void): void;
-                filterChanged(): void;
-                renderingComplete(gridApi): void;
-                rowsRendered(): void;
-                rowsVisibleChanged(): void;
-                sortChanged(scope: any, callBack: (grid: IGrid, sortColumns: IColumnDef[]) => void): void;
-                scrollBegin(): void;
-                scrollEnd(): void;
-            }
+        interface IGridApiEvents {
+            canvasHeightChanged(oldHeight: number, newHeight: number): void
+            columnVisibilityChanged(scope: any, callBack: (column: IColumnDef) => void): void;
+            filterChanged(): void;
+            renderingComplete(gridApi): void;
+            rowsRendered(): void;
+            rowsVisibleChanged(): void;
+            sortChanged(scope: any, callBack: (grid: IGrid, sortColumns: IColumnDef[]) => void): void;
+            scrollBegin(): void;
+            scrollEnd(): void;
+        }
+
+        interface IGridOptions {
+            aggregationCalcThrottle: number;
+            appScopeProvider: any;
+            columnDefs: IColumnDef[];
+            columnFooterHeight: number;
+            columnVirtualizationThreshold: number;
+            data: any[];
+            enableColumnMenus: boolean;
+            enableFiltering: boolean;
+            enableGridMenu: boolean;
+            enableHorizontalScrollbar: any;
+            enableMinHeightCheck: boolean;
+            enableRowHashing: boolean;
+            enableSorting: boolean;
+            enableVerticalScrollbar: any;
+            excessColumns: number;
+            excessRows: number;
+            excludeProperties: string[];
+            flatEntityAccess: boolean;
+            footerTemplate: string;
+            gridFooterTemplate: string;
+            gridMenuCustomItems: IMenuCustomItem[];
+            gridMenuShowHideColumns: boolean;
+            gridMenuTitleFilter: (dislpayName) => string | IPromise<any>;
+            headerTemplate: string;
+            horizontalScrollThreshold: number;
+            infiniteScrollDown: boolean;
+            infiniteScrollRowsFromEnd: number;
+            infiniteScrollUp: boolean;
+            maxVisibleColumnCount: number;
+            minRowsToShow: number;
+            minimumColumnSize: number;
+            onRegisterApi: (gridApi: IGridApi) => void;
+            rowHeight: number;
+            rowTemplate: string;
+            scrollDebounce: number;
+            scrollThreshold: number;
+            showColumnFooter: boolean;
+            showGridFooter: boolean;
+            showHeader: boolean;
+            useExternalFiltering: boolean;
+            useExternalSorting: boolean;
+            virtualizationThreshold: number;
+            wheelScrollThrottle: number;
         }
     }
 
     module Edit {
         interface IGridApi {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiEvents {
             afterCellEdit(scope, callBack: (rowEntity: any, colDef: IColumnDef) => void): void;
             beginCellEdit(scope, callBack: (rowEntity: any, colDef: IColumnDef) => void): void;
             cancelCellEdit(scope, callBack: (rowEntity: any, colDef: IColumnDef) => void): void;
@@ -337,15 +354,19 @@ declare module angular.uiGrid {
     }
 
     module Expandable {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             collapseAllRows(): void;
             expandAllRows(): void;
             toggleAllRows(): void;
             toggleRowExpansion(rowEntity: any): void;
+        }
 
-            on: {
-                rowExpandedStateChanged(scope: any, callBack: (row: IGridRow)=> void): void
-            }
+        interface IGridApiEvents {
+            rowExpandedStateChanged(scope: any, callBack: (row: IGridRow) => void): void
         }
 
         interface IGridOptions {
@@ -358,7 +379,11 @@ declare module angular.uiGrid {
     }
 
     module Exporter {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            
+        }
+
+        interface IGridApiMethods {
             csvExport(rowTypes: string, colTypes: string): void;
             pdfExport(rowTypes: string, colTypes: string): void;
         }
@@ -401,18 +426,22 @@ declare module angular.uiGrid {
     }
 
     module Grouping {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             aggregateColumn(columnName: string, or: string, aggregationLabel: string): void;
             clearGrouping(): void;
             getGrouping(getExpanded: boolean): IGroupingConfig;
             groupColumn(columnName: string): void;
             setGrouping(config: IGroupingConfig): void;
             ungroupColumn(columnName: string): void;
+        }
 
-            on: {
-                aggregationChanged(scope, callBack: (col: IGridColumn) => void): void;
-                groupingChanged(scope, callBack: (col: IGridColumn) => void): void;
-            }
+        interface IGridApiEvents {
+            aggregationChanged(scope, callBack: (col: IGridColumn) => void): void;
+            groupingChanged(scope, callBack: (col: IGridColumn) => void): void;
         }
 
         interface IGridOptions {
@@ -437,7 +466,11 @@ declare module angular.uiGrid {
     }
 
     module Importer {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            
+        }
+
+        interface IGridApiMethods {
             importFile(fileObject: File): void;
         }
 
@@ -454,19 +487,23 @@ declare module angular.uiGrid {
     }
 
     module InfiniteScroll {
-        interface IGridApi {
-            dataLoaded(scrollUp: boolean, scrollDown: boolean): IPromise<any>;
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
+            dataLoaded(scrollUp?: boolean, scrollDown?: boolean): IPromise<any>;
             dataRemovedBottom(scrollUp: boolean, scrollDown: boolean): IPromise<any>;
             dataRemovedBottom(grid: IGrid, scrollUp: boolean, scrollDown: boolean): IPromise<any>;
             dataRemovedTop(scrollUp: boolean, scrollDown: boolean): IPromise<any>;
             dataRemovedTop(grid: IGrid, scrollUp: boolean, scrollDown: boolean): IPromise<any>;
             resetScroll(scrollUp: boolean, scrollDown: boolean): IPromise<any>;
             saveScrollPercentage(): void;
+        }
 
-            on: {
-                needLoadMoreData(scope, getDataDownPromise: (data: any[]) => IPromise<any>): void;
-                needLoadMoreDataTop(scope, getDataDownPromise: (data: any[]) => IPromise<any>): void;
-            }
+        interface IGridApiEvents {
+            needLoadMoreData(scope, getDataDownPromise: (data: any[]) => IPromise<any>): void;
+            needLoadMoreDataTop(scope, getDataDownPromise: (data: any[]) => IPromise<any>): void;
         }
 
         interface IGridOptions {
@@ -475,12 +512,16 @@ declare module angular.uiGrid {
     }
 
     module MoveColumns {
-        interface IGridApi {
-            moveColumn(originalPosition: number, finalPosition: number): void;
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
 
-            on: {
-                columnPositionChanged(scope: any, callBack: (colDef: IColumnDef, originalPosition: number, newPosition: number) => void): void;
-            }
+        interface IGridApiMethods {
+            moveColumn(originalPosition: number, finalPosition: number): void;
+        }
+
+        interface IGridApiEvents {
+            columnPositionChanged(scope: any, callBack: (colDef: IColumnDef, originalPosition: number, newPosition: number) => void): void;
         }
 
         interface IGridOptions {
@@ -493,16 +534,20 @@ declare module angular.uiGrid {
     }
 
     module Pagination {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             getPage(): number;
             getTotalPages(): number;
             nextPage(): void;
             previousPage(): void;
             seek(page: number): void;
+        }
 
-            on: {
-                paginationChanged(scope, callBack: (currentPage: number, pageSize: number)=> void): void;
-            }
+        interface IGridApiEvents {
+            paginationChanged(scope, callBack: (currentPage: number, pageSize: number) => void): void;
         }
 
         interface IGridOptions {
@@ -519,9 +564,11 @@ declare module angular.uiGrid {
 
     module Pinning {
         interface IGridApi {
-            on: {
-                columnSizeChanged(scope: any, callBack: (colDef: IColumnDef, deltaChange: number) => void): void;
-            }
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiEvents {
+            columnSizeChanged(scope: any, callBack: (colDef: IColumnDef, deltaChange: number) => void): void;
         }
 
         interface IGridOptions {
@@ -537,9 +584,11 @@ declare module angular.uiGrid {
 
     module ResizeColumns {
         interface IGridApi {
-            on: {
-                columnSizeChanged(scope: any, callBack: (colDef: IColumnDef, deltaChange: number) => void): void;
-            }
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiEvents {
+            columnSizeChanged(scope: any, callBack: (colDef: IColumnDef, deltaChange: number) => void): void;
         }
 
         interface IGridOptions {
@@ -552,17 +601,21 @@ declare module angular.uiGrid {
     }
 
     module RowEdit {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             flushDirtyRows(): IPromise<any>;
             getDirtyRows(): IGridRow[];
             getErrorRows(): IGridRow[];
             setRowsClean(dataRows: IGridRow[]): void;
             setRowsDirty(dataRows: IGridRow[]): void;
             setSavePromise(rowEntity: any, savePromise: IPromise<any>): void;
+        }
 
-            on: {
-                saveRow(scope, callBack: (rowEntity: any)=> void): void;
-            }
+        interface IGridApiEvents {
+            saveRow(scope, callBack: (rowEntity: any) => void): void;
         }
 
         interface IGridOptions {
@@ -571,7 +624,10 @@ declare module angular.uiGrid {
     }
 
     module SaveState {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+        }
+
+        interface IGridApiMethods {
             restore($scope: any, state: any): void;
             save(): any;
         }
@@ -594,7 +650,11 @@ declare module angular.uiGrid {
     }
 
     module Selection {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents;
+        }
+
+        interface IGridApiMethods {
             clearSelectedRows(event: Event): void;
             getSelectAllState(): boolean;
             getSelectedGridRows(): IGridRow[];
@@ -607,11 +667,11 @@ declare module angular.uiGrid {
             setMultiSelect(multiSelect: boolean): void;
             toggleRowSelection(rowEntity: any, event: Event): void;
             unSelectRow(rowEntity: any, event: Event): void;
-
-            on: {
-                rowSelectionChanged(scope, callBack: (row: IGridRow, event: Event) => void): void;
-                rowSelectionChangedBatch(scope, callBack: (rows: IGridRow[], event: Event) => void): void;
-            }
+        }
+        
+        interface IGridApiEvents {
+            rowSelectionChanged(scope, callBack: (row: uiGrid.IGridRow, event: Event) => void): void;
+            rowSelectionChangedBatch(scope, callBack: (rows: uiGrid.IGridRow[], event: Event) => void): void;
         }
 
         interface IGridOptions {
@@ -636,7 +696,11 @@ declare module angular.uiGrid {
     }
 
     module TreeBase {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
+            on: IGridApiEvents
+        }
+
+        interface IGridApiMethods {
             collapseAllRows(): void;
             collapseRow(row: IGridRow): void;
             collapseRowChildren(row: IGridRow): void;
@@ -647,11 +711,11 @@ declare module angular.uiGrid {
             getTreeState(): any;
             setTreeState(config: any): void;
             toggleRowTreeState(row: IGridRow): void;
+        }
 
-            on: {
-                rowCollapsed(scope, callBack: (row: IGridRow) => void): void;
-                rowExpanded(scope, callBack: (row: IGridRow) => void): void;
-            }
+        interface IGridApiEvents {
+            rowCollapsed(scope, callBack: (row: IGridRow) => void): void;
+            rowExpanded(scope, callBack: (row: IGridRow) => void): void;
         }
 
         interface IGridOptions {
@@ -673,8 +737,11 @@ declare module angular.uiGrid {
     }
 
     module TreeView {
-        interface IGridApi {
+        interface IGridApi extends IGridApiMethods {
             
+        }
+
+        interface IGridApiMethods {
         }
 
         interface IGridOptions {
